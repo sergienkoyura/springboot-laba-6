@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Category</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #28a745;
+        }
+        .text-danger {
+            color: #dc3545;
+        }
+        input, select {
+            width: 100%;
+        }
+        input, select, button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        a {
+            text-decoration: none;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Add Category</h1>
+    <h3 th:if="${isAdded}">Added successfully!</h3>
+    <form id="the-form" th:if="${!isAdded}" th:action="@{/admin/add-category}" th:method="post">
+        <input id="input-name" type="text" name="name" placeholder="Name" required="required"><br><br>
+        <select name="category">
+            <option th:value="0" th:text="None"></option>
+            <option th:each="category : ${categories}" th:value="${category.id}"
+                    th:text="${category.name}"></option>
+        </select><br><br>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+
+    <div>
+        <span id="error-text" class="text-danger"></span>
+    </div>
+
+    <a th:href="@{/admin}" class="btn btn-secondary">To Admin Start</a>
+    <a th:href="@{/}" class="btn btn-secondary">Back to Home Page</a>
+</div>
+
+<script>
+    const form = document.getElementById("the-form");
+    const nameInput = document.getElementById("input-name");
+    const nameError = document.getElementById("error-text");
+    const regex = /(?:<img|<a hre|<div on|<script|<input|url\(javas|http)/;
+    form.addEventListener("submit", function(event) {
+        // Reset previous error messages
+        nameError.innerText = "";
+
+        // Validate name
+        if (nameInput.value.length > 100) {
+            nameError.innerText = "Name must be less than 100 characters.\n";
+            event.preventDefault(); // Prevent form submission
+        }
+        if (regex.test(nameInput.value)) {
+            nameError.innerText += "Invalid characters in the name.\n";
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+</body>
+</html>

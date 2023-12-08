@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Guest Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            border: 1px solid #dcdcdc;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+        }
+        a {
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .fa-trash, .fa-pencil {
+            color: #d9534f;
+        }
+        .link-success {
+            color: #28a745;
+        }
+        .text-info {
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Guest Access</h1>
+    <ul>
+        <li th:each="category : ${categories}">
+            <a th:text="${category.name}" th:href="@{'/guest?category=' + ${category.id}}" class="link-success"></a>
+        </li>
+        <li th:each="product : ${products}" style="font-size: 13px" class="text-info">
+            <span th:text="${product.name}" class="font-weight-bold"></span>
+        </li>
+    </ul>
+
+    <a th:href="@{/guest}" class="btn btn-secondary">To Start</a>
+    <a th:href="@{/}" class="btn btn-secondary">Back to Home Page</a>
+</div>
+</body>
+</html>

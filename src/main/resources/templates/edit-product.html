@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        a {
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .text-danger {
+            color: #dc3545;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Edit Product</h1>
+    <td th:switch="${updated}">
+        <h3 th:case="true" class="text-success">Updated successfully!</h3>
+        <form th:case="false" th:object="${product}" th:action="@{/admin/edit-product}" method="post">
+            <input type="hidden" th:field="*{id}">
+            <input th:type="text" th:field="*{name}" placeholder="Name" required="required" class="form-control"/><br><br>
+            <textarea th:type="text" th:field="*{description}" placeholder="Description" rows="5" class="form-control"></textarea><br><br>
+            <select th:field="*{categoryId}" class="form-select">
+                <option th:value="${currentCategory.id}" th:text="${currentCategory.name}"></option>
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select><br><br>
+            <button class="btn btn-primary">Save</button>
+
+            <div th:if="${#fields.hasErrors('name')}" class="text-danger">
+                <ul>
+                    <li th:each="err : ${#fields.errors('name')}" th:text="${err}" />
+                </ul>
+            </div>
+            <div th:if="${#fields.hasErrors('description')}" class="text-danger">
+                <ul>
+                    <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
+                </ul>
+            </div>
+        </form>
+    </td>
+    <br>
+    <a th:href="@{/admin}" class="btn btn-secondary">To Admin Start</a>
+    <a th:href="@{/}" class="btn btn-secondary">Back to Home Page</a>
+</div>
+</body>
+</html>

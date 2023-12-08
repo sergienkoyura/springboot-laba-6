@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #28a745;
+        }
+        .text-danger {
+            color: #dc3545;
+        }
+        a {
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        input, textarea, select{
+            width: 100%;
+        }
+        input, textarea, select, button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<h1>Add Product</h1>
+<div class="container">
+    <h3 th:if="${isAdded}" class="text-success">Added successfully!</h3>
+    <form id="the-form" th:if="${!isAdded}" th:action="@{/admin/add-product}" th:method="post">
+        <input id="input-name" type="text" name="name" placeholder="Name" required="required"><br><br>
+        <textarea id="textarea-name" name="description" placeholder="Description"></textarea><br><br>
+        <select name="category">
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select><br><br>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <div>
+        <span id="error-text" class="text-danger"></span>
+    </div>
+    <a th:href="@{/admin}" class="btn btn-secondary">To Admin Start</a>
+    <a th:href="@{/}" class="btn btn-secondary">Back to Home Page</a>
+
+</div>
+
+<script>
+    const form = document.getElementById("the-form");
+    const nameInput = document.getElementById("input-name");
+    const nameTextArea = document.getElementById("textarea-name");
+    const nameError = document.getElementById("error-text");
+    const regex = /(?:<img|<a hre|<div on|<script|<input|url\(javas|http)/;
+    form.addEventListener("submit", function(event) {
+        // Reset previous error messages
+        nameError.innerText = "";
+
+        // Validate name
+        if (nameInput.value.length > 100) {
+            nameError.innerText = "Name must be less than 100 characters.\n";
+            event.preventDefault(); // Prevent form submission
+        }
+        if (regex.test(nameInput.value)) {
+            nameError.innerText += "Invalid characters in the name.\n";
+            event.preventDefault(); // Prevent form submission
+        }
+
+        if (regex.test(nameTextArea.value)) {
+            nameError.innerText += "Invalid characters in the description.\n";
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+</body>
+</html>
